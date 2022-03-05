@@ -75,6 +75,8 @@ bool interpret(char* instr){
 	char *pointerXor = xor;
 
 	// If statements for each intruction
+	// ADD INSTRUCTION 
+	// Adds values of r1 and r2 and stores into rd (reg[rd] = reg[rs1] + reg[rs2])
 	if(stringCompare(tokens[0],pointerAdd)){
 		// Create pointers for each value of each token
 		char *rd = tokens[1];
@@ -87,7 +89,8 @@ bool interpret(char* instr){
 		int rs2Int = atoi(rs2+1);
 
 		reg[rdInt] = reg[rs1Int] + reg[rs2Int];
-		
+	// ADDI INSTRUCTION (add immediate)
+	// Adds values of r1 and immediate and stores into rd (reg[rd] = reg[rs1] + imm)
 	}else if(stringCompare(tokens[0],pointerAddi)){
 		// Create pointers for each value of each token
 		char *rd = tokens[1];
@@ -100,7 +103,8 @@ bool interpret(char* instr){
 		int immInt = atoi(imm);
 
 		reg[rdInt] = reg[rs1Int] + immInt;
-
+	// LW INSTRUCTION (load word)
+	// Finds offset and sets rd to the value at the offset memory location (reg[rd] = memory[r1+offset])
 	}else if(stringCompare(tokens[0],pointerLw)){
 		// We have to tokenize 2 more time to get rid of the open and closing parethesis
 		char openDelim = '(';
@@ -127,7 +131,8 @@ bool interpret(char* instr){
 		// store (memory[rs1 + imm]) in rd
 		int32_t read = read_address(memAddress, "mem.txt");
 		reg[rdInt] = read;
-
+	// SW INSTRUCTION (store word)
+	// Finds offset and sets the offset memory location to the value at rs2 (memory[rs1+offset] = reg[rs2])
 	}else if(stringCompare(tokens[0],pointerSw)){
 		char openDelim = '(';
 		char** tokensLW = tokenize(tokens[2],openDelim);
@@ -157,6 +162,7 @@ bool interpret(char* instr){
 		if(write == (int32_t) NULL){
 			printf("ERROR: Unsucessful write to address %0d\n", memAddress);
 		}
+	// AND INSTRUCTION
 	}else if(stringCompare(tokens[0],pointerAnd)){
 		// Create pointers for each value of each token
 		char *rd = tokens[1];
@@ -171,7 +177,7 @@ bool interpret(char* instr){
 		// Using & to preform bitwise and on rs1 and rs2
 		// If rs1 = 010011 and rs2 = 011001, the reult of AND would be dr = 010001
 		reg[rdInt] = reg[rs1Int] & reg[rs2Int];
-
+	// OR INSTRUCTION
 	}else if(stringCompare(tokens[0],pointerOr)){
 		// Create pointers for each value of each token
 		char *rd = tokens[1];
@@ -186,7 +192,7 @@ bool interpret(char* instr){
 		// Using | to preform bitwise or on rs1 and rs2
 		// If rs1 = 000100 and rs2 = 000001, the reult of OR would be dr = 000101
 		reg[rdInt] = reg[rs1Int] | reg[rs2Int];
-	
+	// XOR INSTRUCTION
 	}else if(stringCompare(tokens[0],pointerXor)){
 		// Create pointers for each value of each token
 		char *rd = tokens[1];
